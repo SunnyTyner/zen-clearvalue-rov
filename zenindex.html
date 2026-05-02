@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClearValue ROV by Zen Appraisals</title>
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --card: #ffffff;
+      --ink: #2f342f;
+      --muted: #6d756d;
+      --line: #ded5c8;
+      --accent: #7d9271;
+      --accent-dark: #52664b;
+      --gold: #c7a85c;
+      --cream: #fbf7ef;
+      --warn: #8a5a1f;
+      --bad: #8b2f2f;
+      --good: #2f6b45;
+      --soft: #eef3e9;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.45; }
+    header { background: linear-gradient(135deg, #465840, #7d9271); color: white; padding: 30px 20px; border-bottom: 5px solid var(--gold); }
+    header .wrap, main { max-width: 1120px; margin: 0 auto; }
+    h1, h2, h3 { margin-top: 0; }
+    h1 { margin-bottom: 4px; font-size: 36px; letter-spacing: -0.5px; }
+    .brand-kicker { text-transform: uppercase; letter-spacing: 1.8px; font-size: 12px; font-weight: 700; color: #eadbbd; margin-bottom: 8px; }
+    .brand-byline { font-weight: 700; font-size: 15px; opacity: 0.95; margin-bottom: 10px; }
+    .brand-subline { margin-top: 12px; font-size: 13px; color: #f4ead8; max-width: 920px; }
+    header p { margin: 0; max-width: 850px; opacity: 0.96; font-size: 16px; }
+    .logo-mark { width: 58px; height: 58px; border-radius: 18px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.35); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; color: #f7ead0; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
+    .hero-row { display: flex; gap: 16px; align-items: flex-start; }
+    main { padding: 24px 20px 60px; display: grid; gap: 18px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(36,49,38,0.07); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    label { display: block; font-weight: 700; font-size: 13px; margin-bottom: 5px; }
+    input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 10px 11px; font-size: 14px; font-family: inherit; background: #fff; color: var(--ink); }
+    input:focus, select:focus, textarea:focus { outline: 2px solid rgba(125,146,113,0.25); border-color: var(--accent); }
+    textarea { min-height: 84px; resize: vertical; }
+    .helper { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; }
+    .checkrow { display: flex; gap: 9px; align-items: flex-start; font-size: 14px; font-weight: 400; }
+    .checkrow input { width: auto; margin-top: 2px; }
+    .comp-card { border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 14px; background: #fffdf9; }
+    .comp-header { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 12px; }
+    .badge { display: inline-block; border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 700; background: var(--soft); color: var(--accent-dark); white-space: nowrap; }
+    .badge.good { background: #e4f2e9; color: var(--good); }
+    .badge.warn { background: #fff2db; color: var(--warn); }
+    .badge.bad { background: #f8e4e4; color: var(--bad); }
+    button { border: 0; border-radius: 10px; padding: 11px 15px; font-weight: 700; cursor: pointer; font-size: 14px; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-secondary { background: #e7dfd1; color: var(--ink); }
+    .btn-danger { background: #f4dddd; color: var(--bad); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .notice { background: #fff8ea; border: 1px solid #ead6a9; border-radius: 14px; padding: 14px; color: #5c4520; font-size: 14px; }
+    .output-wrap { position: relative; }
+    .output-watermark { position: absolute; right: 22px; bottom: 18px; font-size: 11px; letter-spacing: 0.8px; color: rgba(63,88,66,0.38); text-transform: uppercase; pointer-events: none; }
+    .output { white-space: pre-wrap; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; min-height: 280px; font-family: Georgia, 'Times New Roman', serif; font-size: 15px; }
+    .footer-brand { text-align: center; font-size: 12px; color: var(--muted); padding: 6px 0 0; }
+    @media (max-width: 820px) { .grid, .grid-3, .checks { grid-template-columns: 1fr; } h1 { font-size: 28px; } .hero-row { flex-direction: column; } }
+    @media print { body { background: white; } header, .no-print, .input-section { display: none !important; } main { display: block; padding: 0; max-width: none; } .card { box-shadow: none; border: 0; padding: 0; } .output { border: 0; padding: 0; font-size: 12pt; } .output-watermark { position: fixed; bottom: 20px; right: 30px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap hero-row">
+      <div class="logo-mark">ZA</div>
+      <div>
+        <div class="brand-kicker">Zen Appraisals</div>
+        <h1>ClearValue ROV</h1>
+        <div class="brand-byline">by Zen Appraisals</div>
+        <p>A free, browser-based tool to help agents organize factual reconsideration of value requests with clear, respectful, lender-ready language.</p>
+        <div class="brand-subline">Clarity and compassion for appraisal and consulting services in the Philadelphia Metro area, Pennsylvania, and New Jersey.</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card notice no-print">
+      <strong>Important note from Zen Appraisals:</strong> This tool helps agents organize factual market data for submission through the lender’s approved ROV process. It is not intended to pressure, influence, or coerce an appraiser. Strong ROV requests are calm, specific, and supported by verifiable market evidence.
+    </section>
+
+    <section class="card input-section">
+      <h2>1. Property & Appraisal Information</h2>
+      <p class="helper">Start with the basic file facts. Leave anything blank if you do not have it.</p>
+      <div class="grid">
+        <div><label for="subjectAddress">Subject Property Address</label><input id="subjectAddress" placeholder="123 Main Street, City, State" /></div>
+        <div><label for="agentName">Agent Name</label><input id="agentName" placeholder="Agent name" /></div>
+        <div><label for="agentContact">Agent Email / Phone</label><input id="agentContact" placeholder="email and/or phone" /></div>
+        <div><label for="borrowerName">Borrower / Buyer Name</label><input id="borrowerName" placeholder="Optional" /></div>
+        <div><label for="contractPrice">Contract Price</label><input id="contractPrice" type="number" placeholder="450000" /></div>
+        <div><label for="appraisedValue">Appraised Value</label><input id="appraisedValue" type="number" placeholder="425000" /></div>
+        <div><label for="effectiveDate">Appraisal Effective Date</label><input id="effectiveDate" type="date" /></div>
+        <div><label for="loanType">Loan Type</label><select id="loanType"><option value="Conventional">Conventional</option><option value="FHA">FHA</option><option value="VA">VA</option><option value="USDA">USDA</option><option value="Unknown">Unknown</option></select></div>
+        <div><label for="lender">Lender / AMC</label><input id="lender" placeholder="Optional" /></div>
+        <div><label for="requestedValue">Requested Value, if any</label><input id="requestedValue" type="number" placeholder="Optional" /></div>
+      </div>
+    </section>
+
+    <section class="card input-section">
+      <h2>2. ROV Concerns</h2>
+      <p class="helper">Select only issues that are factual, supportable, and relevant. The cleanest ROV packets usually focus on a few strong points, not every disagreement.</p>
+      <div class="checks" id="concerns">
+        <label class="checkrow"><input type="checkbox" value="The appraisal may not have considered more comparable nearby closed sales." /> More comparable nearby closed sales were available</label>
+        <label class="checkrow"><input type="checkbox" value="The appraisal may contain a factual property data issue, such as living area, bedroom/bath count, site size, age, garage, pool, or other physical feature." /> Factual property data issue</label>
+        <label class="checkrow"><input type="checkbox" value="The appraisal may not fully recognize relevant updates, renovations, condition, or quality differences." /> Updates / condition / quality concern</label>
+        <label class="checkrow"><input type="checkbox" value="The appraisal may include unsupported, inconsistent, or unclear adjustments." /> Unsupported or inconsistent adjustments</label>
+        <label class="checkrow"><input type="checkbox" value="The neighborhood or market area selection may not reflect the subject’s competitive market." /> Neighborhood / market area issue</label>
+        <label class="checkrow"><input type="checkbox" value="The appraisal may not fully account for a value-contributing feature such as pool, view, garage, ADU, acreage, waterfront, or other site influence." /> Special feature not fully considered</label>
+        <label class="checkrow"><input type="checkbox" value="The report may not fully reflect current market conditions as of the effective date." /> Market condition / time trend concern</label>
+        <label class="checkrow"><input type="checkbox" value="There may be other factual omissions or errors that should be reviewed through the lender’s ROV process." /> Other factual omission or error</label>
+      </div>
+      <div style="margin-top:14px;"><label for="concernDetails">Additional factual explanation</label><textarea id="concernDetails" placeholder="Briefly explain the issue. Avoid emotional language or pressure. Stick to facts."></textarea></div>
+    </section>
+
+    <section class="card input-section">
+      <div class="comp-header"><div><h2>3. Proposed Comparable Sales</h2><p class="helper">Enter up to 5 sales. The app will score each one using simple appraisal-style screening rules.</p></div><button class="btn-secondary" type="button" onclick="addComp()">+ Add Comp</button></div>
+      <div id="comps"></div>
+    </section>
+
+    <section class="card input-section">
+      <h2>4. Generate ClearValue ROV Packet</h2>
+      <div class="actions">
+        <button class="btn-primary" type="button" onclick="generatePacket()">Generate ROV Packet</button>
+        <button class="btn-secondary" type="button" onclick="window.print()">Print / Save as PDF</button>
+        <button class="btn-secondary" type="button" onclick="copyOutput()">Copy Letter</button>
+        <button class="btn-secondary" type="button" onclick="requestReview()">Have Zen Review This ROV</button>
+        <button class="btn-danger" type="button" onclick="clearAll()">Clear Form</button>
+      </div>
+      <p class="helper">Tip: after generating, choose Print → Save as PDF. Attach MLS sheets, public record support, photos, permits, sketches, or correction evidence separately. Keep the tone factual and professional.</p>
+      <div class="notice" style="margin-top:14px; background:#f8f4ea; border-color:#d9c28d;"><strong>Optional next step:</strong> Want an appraiser’s eyes on it before you send it? Click <strong>Have Zen Review This ROV</strong> after generating your packet. This creates a pre-filled email review request to Zen Appraisals.</div>
+    </section>
+
+    <section class="card" id="packetCard">
+      <h2 class="no-print">Generated ROV Packet</h2>
+      <div class="output-wrap"><div class="output" id="output">Your ClearValue ROV packet will appear here.</div><div class="output-watermark">ClearValue ROV · Zen Appraisals</div></div>
+      <div class="footer-brand no-print">Powered by Zen Appraisals · carole@zenappraisals.com · Serving Philadelphia Metro, PA, and NJ counties</div>
+    </section>
+  </main>
+
+  <script>
+    'use strict';
+    var compCount = 0;
+    function money(value) { if (value === undefined || value === null || String(value).trim() === '') return ''; var n = Number(value); if (isNaN(n)) return String(value); return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }); }
+    function todayFormatted() { return new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+    function getVal(id) { var el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; }
+    function addComp() {
+      if (compCount >= 5) { alert('Limit this ROV packet to 5 proposed sales. Stronger and fewer is usually better.'); return; }
+      compCount += 1; var id = compCount; var div = document.createElement('div'); div.className = 'comp-card'; div.id = 'comp' + id;
+      div.innerHTML = [
+        '<div class="comp-header"><h3>Proposed Comp ' + id + '</h3><span class="badge" id="scoreBadge' + id + '">Not scored</span></div>',
+        '<div class="grid-3">',
+        '<div><label for="compAddress' + id + '">Address</label><input id="compAddress' + id + '" placeholder="Comp address" /></div>',
+        '<div><label for="compPrice' + id + '">Sale Price</label><input id="compPrice' + id + '" type="number" placeholder="450000" /></div>',
+        '<div><label for="compDate' + id + '">Sale Date</label><input id="compDate' + id + '" type="date" /></div>',
+        '<div><label for="compDistance' + id + '">Distance to Subject (miles)</label><input id="compDistance' + id + '" type="number" step="0.01" placeholder="0.50" /></div>',
+        '<div><label for="compGla' + id + '">GLA / Living Area</label><input id="compGla' + id + '" type="number" placeholder="2000" /></div>',
+        '<div><label for="compYear' + id + '">Year Built</label><input id="compYear' + id + '" type="number" placeholder="1995" /></div>',
+        '<div><label for="compSite' + id + '">Site Size</label><input id="compSite' + id + '" placeholder="0.25 acres / 10,890 sf" /></div>',
+        '<div><label for="compBedBath' + id + '">Beds / Baths</label><input id="compBedBath' + id + '" placeholder="4/2" /></div>',
+        '<div><label for="compMls' + id + '">MLS #</label><input id="compMls' + id + '" placeholder="Optional" /></div></div>',
+        '<div style="margin-top:12px;" class="grid"><div><label for="compSimilarity' + id + '">Similarity to Subject</label><select id="compSimilarity' + id + '"><option value="high">High - very similar</option><option value="medium">Medium - usable with explanation</option><option value="low">Low - materially different</option></select></div>',
+        '<div><label for="compCondition' + id + '">Condition / Quality Match</label><select id="compCondition' + id + '"><option value="similar">Similar</option><option value="superior">Superior to subject</option><option value="inferior">Inferior to subject</option><option value="unknown">Unknown</option></select></div></div>',
+        '<div style="margin-top:12px;"><label for="compReason' + id + '">Why this sale should be considered</label><textarea id="compReason' + id + '" placeholder="Explain why this sale is more relevant than one or more sales used in the appraisal. Be specific."></textarea></div>',
+        '<div style="margin-top:12px;" class="actions"><button class="btn-secondary" type="button" onclick="scoreComp(' + id + ')">Score This Comp</button><button class="btn-danger" type="button" onclick="removeComp(' + id + ')">Remove</button></div><p class="helper" id="scoreText' + id + '"></p>'
+      ].join('');
+      document.getElementById('comps').appendChild(div);
+    }
+    function removeComp(id) { var el = document.getElementById('comp' + id); if (el) el.remove(); }
+    function scoreComp(id) {
+      var score = 0, reasons = [], distance = Number(getVal('compDistance' + id)), saleDate = getVal('compDate' + id), similarity = getVal('compSimilarity' + id), condition = getVal('compCondition' + id), reason = getVal('compReason' + id), price = Number(getVal('compPrice' + id)), appraisedValue = Number(getVal('appraisedValue'));
+      if (!isNaN(distance)) { if (distance <= 1) { score += 25; reasons.push('Good proximity.'); } else if (distance <= 3) { score += 15; reasons.push('Moderate proximity; explain market similarity.'); } else { score += 5; reasons.push('Distant sale; needs strong explanation.'); } }
+      if (saleDate) { var daysOld = Math.abs((new Date() - new Date(saleDate)) / (1000 * 60 * 60 * 24)); if (daysOld <= 180) { score += 25; reasons.push('Recent sale.'); } else if (daysOld <= 365) { score += 15; reasons.push('Older but potentially usable.'); } else { score += 5; reasons.push('Older sale; time adjustment issue should be explained.'); } }
+      if (similarity === 'high') { score += 25; reasons.push('High physical similarity.'); } if (similarity === 'medium') { score += 15; reasons.push('Usable similarity with explanation.'); } if (similarity === 'low') { score += 2; reasons.push('Low similarity; may weaken the ROV.'); }
+      if (condition === 'similar') { score += 15; reasons.push('Condition/quality appears similar.'); } if (condition === 'superior') { score += 6; reasons.push('Superior comp may need downward adjustment.'); } if (condition === 'inferior') { score += 10; reasons.push('Inferior comp may still support value if adjusted properly.'); } if (condition === 'unknown') { score += 2; reasons.push('Unknown condition is a credibility risk.'); }
+      if (reason.length >= 40) { score += 10; reasons.push('Explanation is specific enough to review.'); } else { reasons.push('Explanation is thin; add specific support.'); }
+      if (price && appraisedValue && price < appraisedValue) { score -= 15; reasons.push('Warning: sale price is below appraised value and may not support an upward ROV.'); }
+      var label = 'Weak / Do Not Submit Unless Necessary', cls = 'bad'; if (score >= 80) { label = 'Strong Comp'; cls = 'good'; } else if (score >= 55) { label = 'Usable With Explanation'; cls = 'warn'; }
+      var badge = document.getElementById('scoreBadge' + id), scoreText = document.getElementById('scoreText' + id); if (badge) { badge.textContent = label + ' (' + score + ')'; badge.className = 'badge ' + cls; } if (scoreText) scoreText.textContent = reasons.join(' '); return { score: score, label: label, reasons: reasons.join(' ') };
+    }
+    function getCheckedConcerns() { return Array.prototype.slice.call(document.querySelectorAll('#concerns input:checked')).map(function(c) { return c.value; }); }
+    function collectComps() { var comps = []; for (var id = 1; id <= compCount; id += 1) { if (!document.getElementById('comp' + id)) continue; var address = getVal('compAddress' + id); if (!address) continue; comps.push({ id: id, address: address, price: getVal('compPrice' + id), date: getVal('compDate' + id), distance: getVal('compDistance' + id), gla: getVal('compGla' + id), year: getVal('compYear' + id), site: getVal('compSite' + id), bedBath: getVal('compBedBath' + id), mls: getVal('compMls' + id), reason: getVal('compReason' + id), score: scoreComp(id) }); } return comps; }
+    function buildPacketText() {
+      var subjectAddress = getVal('subjectAddress'), agentName = getVal('agentName'), agentContact = getVal('agentContact'), borrowerName = getVal('borrowerName'), contractPrice = getVal('contractPrice'), appraisedValue = getVal('appraisedValue'), effectiveDate = getVal('effectiveDate'), loanType = getVal('loanType'), lender = getVal('lender'), requestedValue = getVal('requestedValue'), concernDetails = getVal('concernDetails'), concerns = getCheckedConcerns(), comps = collectComps(), valueGap = contractPrice && appraisedValue ? Number(contractPrice) - Number(appraisedValue) : null, supportiveComps = comps.filter(function(c) { return c.score.score >= 55; }), weakComps = comps.filter(function(c) { return c.score.score < 55; }), lines = [];
+      lines.push('RECONSIDERATION OF VALUE REQUEST PACKET'); lines.push('Prepared with ClearValue ROV by Zen Appraisals'); lines.push('Prepared: ' + todayFormatted()); lines.push('');
+      lines.push('Subject Property: ' + (subjectAddress || '[Subject Property Address]')); lines.push('Borrower/Buyer: ' + (borrowerName || '[Not Provided]')); lines.push('Loan Type: ' + (loanType || '[Not Provided]')); lines.push('Lender/AMC: ' + (lender || '[Not Provided]')); lines.push('Appraisal Effective Date: ' + (effectiveDate || '[Not Provided]')); lines.push('Contract Price: ' + (money(contractPrice) || '[Not Provided]')); lines.push('Appraised Value: ' + (money(appraisedValue) || '[Not Provided]')); if (valueGap !== null && !isNaN(valueGap)) lines.push('Difference Between Contract Price and Appraised Value: ' + money(valueGap)); if (requestedValue) lines.push('Requested Review Value: ' + money(requestedValue)); lines.push('Prepared By: ' + (agentName || '[Agent Name]')); lines.push('Agent Contact: ' + (agentContact || '[Agent Contact]')); lines.push('');
+      lines.push('SUBMISSION NOTE'); lines.push('This request is intended to be submitted through the lender\'s approved reconsideration of value process. The purpose of this packet is to identify factual information, potentially relevant comparable sales, and specific items that may warrant review. This request is not intended to pressure, coerce, or improperly influence the appraiser. Zen Appraisals encourages clear, accurate, respectful communication grounded in verifiable market evidence.'); lines.push('');
+      lines.push('SUMMARY OF REQUEST'); lines.push('A reconsideration of value is respectfully requested for the subject property. This packet is based on factual concerns and proposed comparable sales summarized below. The goal is to provide clear, verifiable information that may not have been fully considered or may warrant further review in the original appraisal analysis.'); lines.push('');
+      lines.push('IDENTIFIED CONCERNS'); if (concerns.length) { concerns.forEach(function(c, i) { lines.push((i + 1) + '. ' + c); }); } else { lines.push('No specific concern category was selected.'); } if (concernDetails) { lines.push(''); lines.push('Additional explanation: ' + concernDetails); } lines.push('');
+      lines.push('PROPOSED COMPARABLE SALES SUMMARY'); if (comps.length) { comps.forEach(function(c, i) { lines.push(''); lines.push('Proposed Sale ' + (i + 1) + ': ' + c.address); lines.push('Sale Price: ' + (money(c.price) || 'Not provided') + ' | Sale Date: ' + (c.date || 'Not provided') + ' | Distance: ' + (c.distance || 'Not provided') + ' miles'); lines.push('GLA: ' + (c.gla || 'Not provided') + ' | Year Built: ' + (c.year || 'Not provided') + ' | Site: ' + (c.site || 'Not provided') + ' | Beds/Baths: ' + (c.bedBath || 'Not provided')); lines.push('MLS #: ' + (c.mls || 'Not provided') + ' | App Screening Result: ' + c.score.label); lines.push('Reason for consideration: ' + (c.reason || 'No explanation provided.')); lines.push('Screening notes: ' + c.score.reasons); }); } else { lines.push('No proposed comparable sales were entered.'); }
+      lines.push(''); lines.push('COMP SCREENING SUMMARY'); lines.push(supportiveComps.length + ' proposed sale(s) screened as Strong or Usable With Explanation.'); lines.push(weakComps.length + ' proposed sale(s) screened as Weak / Do Not Submit Unless Necessary.'); if (weakComps.length) lines.push('Weak sales should be reviewed carefully before submission. Including weak or poorly comparable sales may reduce the credibility of the ROV request.'); lines.push('');
+      lines.push('REQUESTED REVIEW'); lines.push('Please review the attached information and determine whether any factual corrections, comparable sale substitutions, adjustment revisions, or additional market explanation are warranted. The included sales and comments are provided for review and consideration only.'); lines.push('');
+      lines.push('ATTACHMENTS TO INCLUDE'); lines.push('1. MLS sheets for each proposed comparable sale'); lines.push('2. Public record support, if relevant'); lines.push('3. Photos or documentation supporting condition, quality, renovations, or special features'); lines.push('4. Any factual correction evidence, such as building sketch, permit record, survey, or tax record'); lines.push('5. Copy of the lender\'s ROV form, if required'); lines.push('');
+      lines.push('CERTIFICATION BY SUBMITTING PARTY'); lines.push('The information provided in this packet is believed to be accurate and is submitted for factual review through the lender\'s normal reconsideration of value process. The submitting party understands that the appraiser is responsible for independent analysis and is not required to revise the opinion of value unless supported by credible market evidence.'); lines.push('');
+      lines.push('Respectfully submitted,'); lines.push(''); lines.push(agentName || '[Agent Name]'); lines.push(agentContact || '[Agent Contact]'); lines.push(''); lines.push('Prepared using ClearValue ROV by Zen Appraisals'); lines.push('Zen Appraisals | carole@zenappraisals.com'); lines.push('Service Area: Philadelphia Metro; PA counties Montgomery, Bucks, Philadelphia, Delaware, Chester, Berks, Lancaster; NJ counties Hunterdon, Mercer, Burlington, Camden, Gloucester.'); return lines.join('\n');
+    }
+    function generatePacket() { document.getElementById('output').textContent = buildPacketText(); document.getElementById('packetCard').scrollIntoView({ behavior: 'smooth' }); }
+    function fallbackCopy(text) { var temp = document.createElement('textarea'); temp.value = text; document.body.appendChild(temp); temp.select(); document.execCommand('copy'); document.body.removeChild(temp); alert('ROV letter copied.'); }
+    function copyOutput() { var text = document.getElementById('output').textContent; if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(function() { alert('ROV letter copied.'); }).catch(function() { fallbackCopy(text); }); } else { fallbackCopy(text); } }
+    function buildReviewEmailBody() { var subjectAddress = getVal('subjectAddress') || '[Property Address]'; return ['Hi Carole,', '', 'I used ClearValue ROV by Zen Appraisals and would like Zen Appraisals to review my ROV packet before I submit it.', '', 'Property: ' + subjectAddress, 'Agent: ' + (getVal('agentName') || '[Agent Name]'), 'Agent Contact: ' + (getVal('agentContact') || '[Agent Contact]'), 'Loan Type: ' + (getVal('loanType') || '[Loan Type]'), 'Contract Price: ' + (money(getVal('contractPrice')) || '[Contract Price]'), 'Appraised Value: ' + (money(getVal('appraisedValue')) || '[Appraised Value]'), '', 'I understand this is a separate review service and that Zen Appraisals cannot pressure, influence, or direct the original appraiser. I am looking for factual, market-based feedback on whether my ROV packet is clear, credible, and properly supported.', '', 'Notes / deadline:', '', 'Thank you.'].join('\n'); }
+    function requestReview() { var subjectAddress = getVal('subjectAddress') || '[Property Address]'; window.location.href = 'mailto:carole@zenappraisals.com?subject=' + encodeURIComponent('ROV Review Request - ' + subjectAddress) + '&body=' + encodeURIComponent(buildReviewEmailBody()); }
+    function clearAll() { if (!confirm('Clear all entered information?')) return; Array.prototype.slice.call(document.querySelectorAll('input, textarea')).forEach(function(el) { if (el.type === 'checkbox') el.checked = false; else el.value = ''; }); Array.prototype.slice.call(document.querySelectorAll('select')).forEach(function(el) { el.selectedIndex = 0; }); document.getElementById('comps').innerHTML = ''; document.getElementById('output').textContent = 'Your ClearValue ROV packet will appear here.'; compCount = 0; addComp(); addComp(); addComp(); }
+    function runSelfTests() { var tests = [{ name: 'money formats numeric values', pass: money('425000') === '$425,000' }, { name: 'review email body safely builds', pass: buildReviewEmailBody().indexOf('Hi Carole,\n\nI used ClearValue ROV') === 0 }, { name: 'packet builder returns branded Zen text', pass: buildPacketText().indexOf('ClearValue ROV by Zen Appraisals') !== -1 }]; var failed = tests.filter(function(t) { return !t.pass; }); if (failed.length) console.error('Zen ClearValue ROV self-tests failed:', failed); else console.log('Zen ClearValue ROV self-tests passed:', tests.map(function(t) { return t.name; }).join(', ')); }
+    addComp(); addComp(); addComp(); runSelfTests();
+  </script>
+</body>
+</html>
